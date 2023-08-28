@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "EngLit"
+name = "eng_lit"
 version = "0.1.0"
