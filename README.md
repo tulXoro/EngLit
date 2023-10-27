@@ -10,7 +10,7 @@ When I first started learning how to program, I found the logic aspects of telli
 
 ## What EngLit is NOT
 - EngLit is **NOT** meant to be a full replacement for programming languages.
-- EngLit is **NOT** meant to be a perfect English language that interfaces with a computer. If you want want that, see [here](https://chat.openai.com/). Building a perfecf English compiler would require an immense amount of time and effort than I already have.
+- EngLit is **NOT** meant to be a perfect English language that interfaces with a computer. If you want that, see [here](https://chat.openai.com/). Building a perfect English compiler would require an immense amount of time and effort than I already have.
 - As such, because there are multiple ways to say the same thing in English (*every language really is an art form*) I have chosen a specific syntax that I thought was elegant.
 
 # Getting Started
