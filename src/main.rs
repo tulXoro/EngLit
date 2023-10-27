@@ -21,8 +21,7 @@ fn main() {
     std::fs::write("../out_program.asm", lexer.tokens_to_asm(tokens)).expect("Could not write to file!");
     // Run assembly
     std::process::Command::new("nasm")
-        .arg("-f")
-        .arg("elf64")
+        .arg("-felf64")
         .arg("../out_program.asm")
         .output()
         .expect("Failed to execute nasm!");
