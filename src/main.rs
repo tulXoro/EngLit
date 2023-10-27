@@ -1,7 +1,7 @@
-use crate::lexer::Lexer;
-
 mod lexer;
 mod parser;
+
+use crate::lexer::Lexer;
 
 fn main() {
     // Take args
@@ -10,11 +10,9 @@ fn main() {
         panic!("Invalid number of args!");
     }
 
-    let contents: String = std::fs::read_to_string(&args[2])
-        .expect("Could not find file!");
+    let contents: String = std::fs::read_to_string(&args[1]).expect("Could not find file!");
 
-    let lexer = Lexer{};
+    let lexer = Lexer {};
 
     lexer.tokenize(contents);
-
 }

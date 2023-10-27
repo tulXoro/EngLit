@@ -1,1 +1,13 @@
-Create a variable with the value "10".
+(This is a comment)
+Make a variable called "char count" and set it to 0.
+Make a variable called "space count" and set it to 0.
+Make "sentence" a string that is "This is a sentence".
+(This for loop will go through every character in the string "sentence" and print all the characters that are not spaces.)
+For every character, "c" in "sentence", do the following:
+    1. If the character is a space, increment "space count" by 1.
+    2. If the character is not a space, increment "char count" by 1.
+    3. Print "c".
+
+Until told to stop, do the following:
+    1. Print "char count".
+    2. Stop.
