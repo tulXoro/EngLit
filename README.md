@@ -6,3 +6,9 @@ This is a high level programming language that heavily uses English sentences as
 
 ## Why
 This language was made to add synonymous keywords like `when` or `until` in ways that make sense to the programmer.
+
+# Getting Started
+## Installation
+1. Clone the repository
+2. Make sure you have (NASM)[https://www.nasm.us/] installed
+3. Run `./src/main.rs <filename>` to compile and run the program
