@@ -1,3 +1,5 @@
+use std::ops::Index;
+
 pub struct Lexer;
 
 /*********************************************
@@ -5,6 +7,7 @@ pub struct Lexer;
  * tokenize the input file.
  *********************************************/
 impl Lexer {
+    // Break the file into tokens
     pub fn tokenize(&self, content: String) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
         let mut buffer: Vec<char> = Vec::new();
@@ -27,7 +30,7 @@ impl Lexer {
                         buffer.push(content.chars().nth(i).unwrap());
                         i += 1;
                     }
-                    token = Token::new(TokenType::IntLiteral);
+                    token = Token::new_with_val(TokenType::IntLiteral, Some(buffer.iter().collect()));
                 }
                 // When character is a period, create a period token
                 '.' => token = Token::new(TokenType::Period),
@@ -58,22 +61,46 @@ impl Lexer {
         match str.as_str() {
             "create" => Token::new(TokenType::InitVar),
             "end" => Token::new(TokenType::End),
+            "return" => Token::new(TokenType::Return),
             _ => panic!("Invalid token!"),
         }
     }
-    fn tokens_to_asm(&self, tokens: Vec<Token>) -> String {
-        let mut asm: String = String::new();
+    pub fn tokens_to_asm(&self, tokens: Vec<Token>) -> String {
+        // Create a variable that can be written to a file
+        // which will be the assembly code
+        let mut asm: String = "_start:\n".to_string();
 
-        for token in tokens {
+
+        for i in 0..tokens.len() {
+            let token = tokens.index(i);
             match token.kind {
-                TokenType::InitVar => asm.push_str("mov eax, 0\n"),
-                TokenType::IntLiteral => asm.push_str("mov eax, 1\n"),
-                TokenType::End => asm.push_str("mov eax, 1\n"),
+                TokenType::InitVar => {
+                // TODO: Create a variable
+                }
+
+                TokenType::End => {
+
+
+                }
+
+                TokenType::Return => {
+                    if i + 1 < tokens.len()
+                    && tokens.index(i + 1).kind == TokenType::IntLiteral {
+
+                        asm.push_str("\tmov eax, 60\n");
+                        asm.push_str(&format!("\tmov rdi, {}\n",
+                                              tokens.index(i + 1).val.clone().unwrap()));
+                        asm.push_str("\tsyscall\n");
+                    }
+                }
+
                 TokenType::Period => asm.push_str("mov eax, 1\n"),
 
                 TokenType::Illegal => panic!("Invalid token!"),
 
-                _ => panic!("Invalid token!"),
+                _ => {
+
+                }
             }
         }
 
@@ -84,26 +111,27 @@ impl Lexer {
 
 #[derive(PartialEq)]
 enum TokenType {
-    InitVar,
-    IntLiteral,
-    End,
-    Period,
-    Illegal,
+    InitVar,    // make a variable
+    IntLiteral, // literal number value
+    End,        // end of program
+    Return,     // return value from a function
+    Period,     // end of statement (like a semicolon)
+    Illegal,    // invalid token
 }
 
 pub struct Token {
     kind: TokenType,
-    val: Option<String>,
+    val: Option<String>
 }
 
 impl Token {
     fn new(kind: TokenType) -> Token {
         Token { kind, val: None }
     }
-    // fn new(kind: TokenType, val: Option<String>) -> Token {
-    //     Token {
-    //         kind,
-    //         val
-    //     }
-    // }
+    fn new_with_val(kind: TokenType, val: Option<String>) -> Token {
+        Token {
+            kind,
+            val
+        }
+    }
 }
