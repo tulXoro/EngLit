@@ -11,23 +11,24 @@ impl Lexer {
     pub fn tokenize(&self, content: String) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
         let mut buffer: Vec<char> = Vec::new();
+
         // Scan the entire file
         let mut i = 0;
         while i < content.len() {
             let mut token: Token = Token::new(TokenType::Illegal);
             // Check the current character
-            match content.chars().nth(i).unwrap() {
+            match content.as_bytes()[i] as char {
                 // When character is num or letter, check the next character
                 'a'..='z' => {
-                    while content.chars().nth(i).unwrap().is_alphabetic() {
-                        buffer.push(content.chars().nth(i).unwrap());
+                    while content.as_bytes()[i].is_ascii_alphabetic() {
+                        buffer.push(content.as_bytes()[i] as char);
                         i += 1;
                     }
                     token = Lexer::map_alph_token(buffer.iter().collect());
                 }
                 '0'..='9' => {
-                    while content.chars().nth(i).unwrap().is_numeric() {
-                        buffer.push(content.chars().nth(i).unwrap());
+                    while content.as_bytes()[i].is_ascii_digit() {
+                        buffer.push(content.as_bytes()[i] as char);
                         i += 1;
                     }
                     token = Token::new_with_val(TokenType::IntLiteral, Some(buffer.iter().collect()));
@@ -38,7 +39,7 @@ impl Lexer {
                     // Skip whitespace
                 }
                 _ => {
-                    println!("{}", content.chars().nth(i).unwrap());
+                    println!("{}", content.as_bytes()[i] as char);
                     panic!("Invalid character!");
                 }
             }
@@ -65,10 +66,11 @@ impl Lexer {
             _ => panic!("Invalid token!"),
         }
     }
+    // Temp function to convert tokens to assembly
     pub fn tokens_to_asm(&self, tokens: Vec<Token>) -> String {
         // Create a variable that can be written to a file
         // which will be the assembly code
-        let mut asm: String = "_start:\n".to_string();
+        let mut asm: String = "._start:\n".to_string();
 
 
         for i in 0..tokens.len() {
@@ -79,11 +81,6 @@ impl Lexer {
                 }
 
                 TokenType::End => {
-
-
-                }
-
-                TokenType::Return => {
                     if i + 1 < tokens.len()
                     && tokens.index(i + 1).kind == TokenType::IntLiteral {
 
@@ -106,7 +103,12 @@ impl Lexer {
 
         return asm;
     }
+
+
 }
+
+// Util functions
+
 
 
 #[derive(PartialEq)]

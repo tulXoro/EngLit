@@ -1,3 +1,10 @@
 /target
 
-./.idea
+/.idea
+/out_program
+/out_program.o
+/main
+/.idea/.gitignore
+/.idea/EngLit.iml
+/.idea/modules.xml
+/.idea/vcs.xml

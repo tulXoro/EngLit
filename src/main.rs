@@ -13,6 +13,11 @@ fn main() {
     // Open file
     let contents: String = std::fs::read_to_string(&args[1]).expect("Could not find file!");
 
+    // Make sure our file is written in ascii because the language is pure english anyways
+    if !contents.is_ascii() {
+        panic!("File is not in ascii!");
+    }
+
     let lexer = Lexer {};
 
     let tokens = lexer.tokenize(contents);
@@ -25,7 +30,6 @@ fn main() {
         .arg("../out_program.asm")
         .output()
         .expect("Failed to execute nasm!");
-    println!("Successfully assembled!");
 
     std::process::Command::new("ld")
         .arg("-o")
@@ -33,4 +37,8 @@ fn main() {
         .arg("../out_program.o")
         .output()
         .expect("Failed to execute ld!");
+
+    std::process::Command::new("../out_program")
+        .output()
+        .expect("Failed to execute program!");
 }
