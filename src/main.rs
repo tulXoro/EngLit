@@ -18,12 +18,12 @@ fn main() {
         panic!("File is not in ascii!");
     }
 
-    let lexer = Lexer {};
 
-    let tokens = lexer.tokenize(contents);
+
+    let tokens = Lexer::tokenize(contents);
 
     // Export assembly to file
-    std::fs::write("../out_program.asm", lexer.tokens_to_asm(tokens)).expect("Could not write to file!");
+    std::fs::write("../out_program.asm", Lexer::tokens_to_asm(tokens)).expect("Could not write to file!");
     // Run assembly
     std::process::Command::new("nasm")
         .arg("-felf64")

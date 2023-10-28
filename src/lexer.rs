@@ -8,7 +8,7 @@ pub struct Lexer;
  *********************************************/
 impl Lexer {
     // Break the file into tokens
-    pub fn tokenize(&self, content: String) -> Vec<Token> {
+    pub fn tokenize(content: String) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
         let mut buffer: Vec<char> = Vec::new();
 
@@ -44,6 +44,7 @@ impl Lexer {
                 }
             }
 
+            // Make sure we don't add an illegal token
             if token.kind != TokenType::Illegal {
                 tokens.push(token);
                 println!("{}", buffer.iter().collect::<String>());
@@ -57,6 +58,7 @@ impl Lexer {
         return tokens;
     }
 
+    // Map the token to a keyword
     fn map_alph_token(str: String) -> Token {
         println!("Checking token: {}", str);
         match str.as_str() {
@@ -67,11 +69,10 @@ impl Lexer {
         }
     }
     // Temp function to convert tokens to assembly
-    pub fn tokens_to_asm(&self, tokens: Vec<Token>) -> String {
+    pub fn tokens_to_asm(tokens: Vec<Token>) -> String {
         // Create a variable that can be written to a file
         // which will be the assembly code
         let mut asm: String = "._start:\n".to_string();
-
 
         for i in 0..tokens.len() {
             let token = tokens.index(i);
@@ -104,12 +105,7 @@ impl Lexer {
         return asm;
     }
 
-
 }
-
-// Util functions
-
-
 
 #[derive(PartialEq)]
 enum TokenType {
