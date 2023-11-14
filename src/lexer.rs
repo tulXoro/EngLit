@@ -35,9 +35,26 @@ impl Lexer {
                 }
                 // When character is a period, create a period token
                 '.' => token = Token::new(TokenType::Period),
+                '(' => {
+                    // Parenthesis count as comments, so skip until the next parenthesis
+                    while content.as_bytes()[i] as char != ')' {
+                        i += 1;
+                    }
+                    // when there is no matching parenthesis, throw an error
+                    if content.as_bytes()[i] as char != ')' {
+                        panic!("Missing parenthesis!");
+                    }
+                    i+=1;
+                },
+                '\t' => {
+                    // Skip tabs
+                },
+                '\n' => {
+                    // Skip newlines
+                },
                 ' ' => {
                     // Skip whitespace
-                }
+                },
                 _ => {
                     println!("{}", content.as_bytes()[i] as char);
                     panic!("Invalid character!");
@@ -68,6 +85,7 @@ impl Lexer {
             _ => panic!("Invalid token!"),
         }
     }
+    
     // Temp function to convert tokens to assembly
     pub fn tokens_to_asm(tokens: Vec<Token>) -> String {
         // Create a variable that can be written to a file
