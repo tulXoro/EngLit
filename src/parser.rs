@@ -1,5 +1,10 @@
 use crate::lexer::Token;
 
+/*********************************************
+ * The purpose of this module is to parse
+ * tokens into an abstract syntax tree.
+ *********************************************/
+
 pub struct Parser {
     tokens: Vec<Token>,
     index: usize,

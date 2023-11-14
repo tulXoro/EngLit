@@ -3,6 +3,11 @@ mod parser;
 
 use crate::lexer::Lexer;
 
+/*********************************************
+ * This is the main file which controls the
+ * entire program.
+ *********************************************/
+
 fn main() {
     // Take args
     let args: Vec<String> = std::env::args().collect();
@@ -18,8 +23,6 @@ fn main() {
         panic!("File is not in ascii!");
     }
 
-
-
     let tokens = Lexer::tokenize(contents);
 
     // Export assembly to file
@@ -31,14 +34,34 @@ fn main() {
         .output()
         .expect("Failed to execute nasm!");
 
+    // Remove assembly
+    /* Commented out for debugging
+    std::process::Command::new("rm")
+        .arg("../out_program.asm")
+        .output()
+        .expect("Failed to execute rm!");
+    */
+
+    // Link object file
     std::process::Command::new("ld")
         .arg("-o")
         .arg("../out_program")
         .arg("../out_program.o")
         .output()
         .expect("Failed to execute ld!");
+    
+    // Remove object file
+    /* Commented out because our program should
+       not delete anything currently
+    std::process::Command::new("rm")
+        .arg("../out_program.o")
+        .output()
+        .expect("Failed to execute rm!");
+    */
 
+    // Execute program
     std::process::Command::new("../out_program")
         .output()
         .expect("Failed to execute program!");
+
 }
