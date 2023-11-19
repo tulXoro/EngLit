@@ -1,6 +1,8 @@
 mod lexer;
 mod parser;
 
+use futures::stream::{self, StreamExt};
+
 use crate::lexer::Lexer;
 
 /*********************************************
@@ -16,12 +18,11 @@ fn main() {
     }
 
     // Open file
-    let contents: String = std::fs::read_to_string(&args[1]).expect("Could not find file!");
-
-    // Make sure our file is written in ascii because the language is pure english anyways
-    if !contents.is_ascii() {
-        panic!("File is not in ascii!");
-    }
+    let contents = stream::iter(std::fs::read_to_string(&args[1]).expect("Could not read file!").chars())
+        .filter(|c| c.is_ascii())
+        .collect::<String>()
+        .await;
+    
 
     let tokens = Lexer::tokenize(contents);
 
