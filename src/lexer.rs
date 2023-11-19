@@ -8,8 +8,9 @@ pub struct Lexer;
  *********************************************/
 impl Lexer {
     // Break the file into tokens
-    pub fn tokenize(content: String) -> Vec<Token> {
+    pub fn tokenize(content: &[u8]) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
+        // buffer to store a token
         let mut buffer: Vec<char> = Vec::new();
 
         // Scan the entire file
@@ -17,18 +18,18 @@ impl Lexer {
         while i < content.len() {
             let mut token: Token = Token::new(TokenType::Illegal);
             // Check the current character
-            match content.as_bytes()[i] as char {
+            match content[i] as char {
                 // When character is num or letter, check the next character
                 'a'..='z' => {
-                    while content.as_bytes()[i].is_ascii_alphabetic() {
-                        buffer.push(content.as_bytes()[i] as char);
+                    while content[i].is_ascii_alphabetic() {
+                        buffer.push(content[i] as char);
                         i += 1;
                     }
                     token = Lexer::map_alph_token(buffer.iter().collect());
                 }
                 '0'..='9' => {
-                    while content.as_bytes()[i].is_ascii_digit() {
-                        buffer.push(content.as_bytes()[i] as char);
+                    while content[i].is_ascii_digit() {
+                        buffer.push(content[i] as char);
                         i += 1;
                     }
                     token = Token::new_with_val(TokenType::IntLiteral, Some(buffer.iter().collect()));
@@ -37,11 +38,11 @@ impl Lexer {
                 '.' => token = Token::new(TokenType::Period),
                 '(' => {
                     // Parenthesis count as comments, so skip until the next parenthesis
-                    while content.as_bytes()[i] as char != ')' {
+                    while content[i] as char != ')' {
                         i += 1;
                     }
                     // when there is no matching parenthesis, throw an error
-                    if content.as_bytes()[i] as char != ')' {
+                    if content[i] as char != ')' {
                         panic!("Missing parenthesis!");
                     }
                     i+=1;
@@ -56,7 +57,7 @@ impl Lexer {
                     // Skip whitespace
                 },
                 _ => {
-                    println!("{}", content.as_bytes()[i] as char);
+                    println!("{}", content[i] as char);
                     panic!("Invalid character!");
                 }
             }

@@ -1,8 +1,6 @@
 mod lexer;
 mod parser;
 
-use futures::stream::{self, StreamExt};
-
 use crate::lexer::Lexer;
 
 /*********************************************
@@ -17,12 +15,17 @@ fn main() {
         panic!("Invalid number of args!");
     }
 
-    // Open file
-    let contents = stream::iter(std::fs::read_to_string(&args[1]).expect("Could not read file!").chars())
-        .filter(|c| c.is_ascii())
-        .collect::<String>()
-        .await;
-    
+    // Open file as a stream
+    let contents= std::fs::read_to_string(&args[1]).expect("Could not read file!");
+
+    // Make sure file is ASCII because our language is in English anyways
+    if !contents.is_ascii() {
+        panic!("File is not ASCII!");
+    }
+
+    // make contents into bytes so we can iterate through it
+    // easier
+    let contents = contents.as_bytes();
 
     let tokens = Lexer::tokenize(contents);
 
